@@ -1,0 +1,115 @@
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/pet": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Bad thing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PetType": {
+          "enum": [
+              "FluffyBoi",
+              "EvilCat",
+              "Duck"
+          ],
+          "type": "string"
+      },
+      "Pet": {
+        "required": [
+          "id",
+          "name",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "01292b"
+          },
+          "name": {
+            "type": "string",
+            "example": "doggie"
+          },
+          "type": {
+            "$ref": "#/components/schemas/PetType"
+          },
+          "debug": {
+            "type": "string"
+          }
+        }
+      },
+      "BadRequestError": {
+        "required": [
+          "error"
+        ],
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "baddd"
+          }
+        }
+      },
+      "ServerError": {
+        "required": [
+          "error",
+          "severity"
+        ],
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "baddd"
+          },
+          "severity": {
+            "type": "string",
+            "example": "critical"
+          }
+        }
+      }
+    }
+  }
+}

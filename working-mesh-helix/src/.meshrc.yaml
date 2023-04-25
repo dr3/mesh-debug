@@ -1,0 +1,49 @@
+merger: bare
+sources:
+  - name: Pets_V1
+    handler:
+      openapi:
+        source: ../swagger/pets.v1.json
+        endpoint: >-
+          http://localhost:8801
+    transforms:
+      - rename:
+          mode: bare
+          renames:
+            - from:
+                type: Query
+                field: pet_by_petId
+              to:
+                type: Query
+                field: pet
+            - from:
+                type: Query
+                field: pet_by_petId
+                argument: petId
+              to:
+                type: Query
+                field: pet_by_petId
+                argument: id
+      - prune:
+          skipPruning: []
+      - prefix:
+          mode: bare
+          value: v1_
+          includeRootOperations: true
+          ignore:
+            - ObjMap
+  - name: Employees_V1
+    handler:
+      openapi:
+        source: ../swagger/employees.v1.json
+        endpoint: >-
+          http://localhost:8801
+    transforms:
+      - prune:
+          skipPruning: []
+      - prefix:
+          mode: bare
+          value: v1_
+          includeRootOperations: true
+          ignore:
+            - ObjMap

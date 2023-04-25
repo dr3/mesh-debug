@@ -1,0 +1,80 @@
+{
+    "openapi": "3.0.3",
+    "paths": {
+      "/pet/{petId}": {
+        "get": {
+          "parameters": [
+            {
+              "name": "petId",
+              "in": "path",
+              "description": "ID of pet to return",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PetResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Pet not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PetResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "PetResponse": {
+          "type": "object",
+          "properties": {
+            "pet": {
+              "$ref": "#/components/schemas/Pet"
+            },
+            "error": {
+              "type": "string",
+              "example": "baddd"
+            }
+          }
+        },
+        "Pet": {
+          "required": [
+            "id",
+            "name",
+            "type"
+          ],
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "01292b"
+            },
+            "name": {
+              "type": "string",
+              "example": "doggie"
+            },
+            "type": {
+              "type": "string",
+              "example": "dog"
+            }
+          }
+        }
+      }
+    }
+  }
