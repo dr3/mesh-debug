@@ -1,0 +1,16 @@
+merger: bare
+sources:
+  - name: Pets_V1
+    handler:
+      openapi:
+        source: ../swagger/pets.v1.json
+        endpoint: >-
+          http://localhost:8801
+    transforms:
+      - rename:
+          mode: bare
+          renames:
+            - from:
+                type: ServerError
+              to:
+                type: EvilError

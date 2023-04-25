@@ -80,6 +80,20 @@ Get error `"Cannot read properties of undefined (reading 'originalName')"`
 
 ---
 
+### /union-renaming
+
+Renaming a type within an union causes error
+
+```sh
+cd union-renaming && yarn && yarn test
+```
+
+#### What happens?
+
+Get error `Abstract type \"pet_by_petId_response\" was resolved to a type \"ServerError\" that does not exist inside the schema.`
+
+---
+
 ### /datetime-timezone
 
 Dates are converted to UTC
