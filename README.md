@@ -77,3 +77,19 @@ cd naming-convention-originalName && yarn && yarn test
 #### What happens?
 
 Get error `"Cannot read properties of undefined (reading 'originalName')"`
+
+---
+
+### /datetime-timezone
+
+Dates are converted to UTC
+
+Issue: https://github.com/Urigo/graphql-mesh/issues/5229
+
+```sh
+cd datetime-timezone && yarn && yarn test
+```
+
+#### What happens?
+
+Get `2016-02-01T11:00:00.000Z` instead of `2016-02-01T00:00:00-11:00`
