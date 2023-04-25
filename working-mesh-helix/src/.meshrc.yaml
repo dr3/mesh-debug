@@ -30,8 +30,6 @@ sources:
           mode: bare
           value: v1_
           includeRootOperations: true
-          ignore:
-            - ObjMap
   - name: Employees_V1
     handler:
       openapi:
@@ -45,5 +43,3 @@ sources:
           mode: bare
           value: v1_
           includeRootOperations: true
-          ignore:
-            - ObjMap

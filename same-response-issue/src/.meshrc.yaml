@@ -30,5 +30,3 @@ sources:
           mode: bare
           value: v1_
           includeRootOperations: true
-          ignore:
-            - ObjMap
