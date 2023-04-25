@@ -105,3 +105,4 @@ dist
 
 hidden/
 .DS_Store
+.mesh/
