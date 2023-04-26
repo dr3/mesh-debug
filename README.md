@@ -8,6 +8,12 @@ This repo includes reproduction examples of a few mesh bugs
 nvm use
 ```
 
+### Optional
+
+```sh
+for d in ./*/ ; do (cd "$d" && yarn); done
+```
+
 ## Examples
 
 ### /working-mesh-helix
