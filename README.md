@@ -113,3 +113,17 @@ cd datetime-timezone && yarn && yarn test
 #### What happens?
 
 Get `2016-02-01T11:00:00.000Z` instead of `2016-02-01T00:00:00-11:00`
+
+---
+
+### /fetch-path
+
+When using mesh inside src folder, fetch works at build or runtime but not both
+
+```sh
+cd fetch-path && yarn && yarn test
+```
+
+#### What happens?
+
+Get `Cannot find module './utils/fetch.ts' from '.mesh/index.ts'`
