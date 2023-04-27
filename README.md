@@ -113,3 +113,17 @@ cd datetime-timezone && yarn && yarn test
 #### What happens?
 
 Get `2016-02-01T11:00:00.000Z` instead of `2016-02-01T00:00:00-11:00`
+
+---
+
+### /ts-artifacts
+
+Build mesh gets typescript error
+
+```sh
+cd ts-artifacts && yarn && yarn test
+```
+
+#### What happens?
+
+Get error `TypeError: Cannot read properties of undefined (reading 'get')`
