@@ -5,4 +5,4 @@ sources:
       openapi:
         source: ../swagger/pets.v1.json
         endpoint: >-
-          http://localhost:8801
+          http://localhost:4001
