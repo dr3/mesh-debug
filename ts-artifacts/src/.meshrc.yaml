@@ -1,0 +1,17 @@
+merger: bare
+sources:
+  - name: Pets_V1
+    handler:
+      openapi:
+        source: ../swagger/pets.v1.json
+        endpoint: >-
+          http://localhost:8801
+  - name: Employees_V1
+    handler:
+      openapi:
+        source: ../swagger/employees.v1.json
+        endpoint: >-
+          http://localhost:8801
+transforms:
+  - prune:
+      skipPruning: []

@@ -116,14 +116,14 @@ Get `2016-02-01T11:00:00.000Z` instead of `2016-02-01T00:00:00-11:00`
 
 ---
 
-### /fetch-path
+### /ts-artifacts
 
-When using mesh inside src folder, fetch works at build or runtime but not both
+Build mesh gets typescript error
 
 ```sh
-cd fetch-path && yarn && yarn test
+cd ts-artifacts && yarn && yarn test
 ```
 
 #### What happens?
 
-Get `Cannot find module './utils/fetch.ts' from '.mesh/index.ts'`
+Get error `TypeError: Cannot read properties of undefined (reading 'get')`

@@ -12,16 +12,23 @@ const getServer = async () => {
     async handler(req, reply) {
       const response = await meshHttp.handleNodeRequest(req, {
         req,
-        reply
-      })
+        reply,
+      });
+      response.headers.forEach((value: any, key: any) => {
+        reply.header(key, value);
+      });
 
-      response.headers.forEach((value, key) => {
-        reply.header(key, value)
-      })
-  
-      reply.status(response.status)
+      reply.status(response.status);
 
-      return reply.send(response.body)
+      const reader = response.body!.getReader();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        reply.send(value);
+      }
+
+      return reply;
     }
   })
 

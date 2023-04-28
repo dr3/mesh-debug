@@ -2,7 +2,7 @@
   "scripts": {
     "init-mesh": "rm -rf src/.mesh && mesh build -r ts-node/register/transpile-only --dir src",
     "postinstall": "patch-package",
-    "test": "yarn init-mesh && jest src"
+    "test": "yarn init-mesh"
   },
   "dependencies": {
     "@envelop/core": "^3.0.6",
