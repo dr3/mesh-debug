@@ -1,5 +1,6 @@
-import getServer from "./server";
-import getUpstreamServer from "./upstream";
+import { fetch } from '@whatwg-node/fetch';
+import { app as server } from "./server";
+import { server as upstream } from "./upstream";
 
 const petQuery = `
 query myQuery(
@@ -26,38 +27,39 @@ query myQuery(
 `;
 
 describe("server", () => {
-  const upsteamApp = getUpstreamServer();
-
   beforeAll(async () => {
-    await upsteamApp.listen({ port: 8801 });
+    await server.listen({
+      port: 4000,
+    });
+    await upstream.listen({
+      port: 4001,
+    });
   });
 
   afterAll(async () => {
-    upsteamApp.close();
+    await server.close();
+    await upstream.close();
   });
 
   it("should return data for 200", async () => {
-    const app = await getServer();
-
-    const response = await app.inject({
-      method: "POST",
-      url: "/graphql",
+    const response = await fetch('http://localhost:4000/graphql', {
+      method: 'POST',
       headers: {
-        accept: "application/json",
-        "content-type": "application/json",
+        'Content-Type': 'application/json',
       },
-      payload: JSON.stringify({
+      body: JSON.stringify({
         query: petQuery,
         variables: {
           petId: "pet200",
-        },
+        }
       }),
     });
 
-    // expect(response.statusCode).toEqual(200);
-    expect(JSON.parse(response.body)).toEqual({
+    const resJson = await response.json();
+
+    expect(resJson).toEqual({
       data: {
-        pet: {
+        pet_by_petId: {
           __typename: "Pet",
           id: "pet200",
           name: "Bob",
@@ -68,27 +70,24 @@ describe("server", () => {
   });
 
   it("should return data for 400", async () => {
-    const app = await getServer();
-
-    const response = await app.inject({
-      method: "POST",
-      url: "/graphql",
+    const response = await fetch('http://localhost:4000/graphql', {
+      method: 'POST',
       headers: {
-        accept: "application/json",
-        "content-type": "application/json",
+        'Content-Type': 'application/json',
       },
-      payload: JSON.stringify({
+      body: JSON.stringify({
         query: petQuery,
         variables: {
           petId: "pet400",
-        },
+        }
       }),
     });
 
-    // expect(response.statusCode).toEqual(200);
-    expect(JSON.parse(response.body)).toEqual({
+    const resJson = await response.json();
+
+    expect(resJson).toEqual({
       data: {
-        pet: {
+        pet_by_petId: {
           __typename: "PetNotFoundError",
           error: "can not find pet400"
         },
@@ -97,27 +96,24 @@ describe("server", () => {
   });
 
   it("should return data for 500", async () => {
-    const app = await getServer();
-
-    const response = await app.inject({
-      method: "POST",
-      url: "/graphql",
+    const response = await fetch('http://localhost:4000/graphql', {
+      method: 'POST',
       headers: {
-        accept: "application/json",
-        "content-type": "application/json",
+        'Content-Type': 'application/json',
       },
-      payload: JSON.stringify({
+      body: JSON.stringify({
         query: petQuery,
         variables: {
           petId: "pet500",
-        },
+        }
       }),
     });
 
-    // expect(response.statusCode).toEqual(200);
-    expect(JSON.parse(response.body)).toEqual({
+    const resJson = await response.json();
+
+    expect(resJson).toEqual({
       data: {
-        pet: {
+        pet_by_petId: {
           __typename: "EvilError",
           error: "this is bad",
           severity: "real bad"

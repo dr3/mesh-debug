@@ -1,49 +1,32 @@
 import fastify from "fastify";
-import { envelop, useEngine, useSchema } from "@envelop/core";
-import * as GraphQLJS from "graphql";
-import { getBuiltMesh } from "./.mesh/index";
-import {
-  getGraphQLParameters,
-  processRequest,
-  sendResult,
-} from "graphql-helix";
+import { createBuiltMeshHTTPHandler } from "./.mesh/index";
 
-const getServer = async () => {
-  const server = fastify();
-  const { schema, plugins } = await getBuiltMesh();
+export const app = fastify()
 
-  const helixConfig = {
-    getEnveloped: envelop({
-      plugins: [...plugins, useEngine(GraphQLJS), useSchema(schema)],
-    }),
-    enhanceResponseErrors: true,
-  };
+const meshHttp = createBuiltMeshHTTPHandler()
 
-  server.route({
-    method: "POST",
-    url: "/graphql",
-    async handler(request, reply) {
-      const { parse, validate, contextFactory, execute, schema } =
-        helixConfig.getEnveloped({ request });
-      const { operationName, query, variables } = getGraphQLParameters(request);
+app.route({
+  url: '/graphql',
+  method: ['GET', 'POST', 'OPTIONS'],
+  async handler(req, reply) {
+    const response = await meshHttp.handleNodeRequest(req, {
+      req,
+      reply,
+    });
+    response.headers.forEach((value: any, key: any) => {
+      reply.header(key, value);
+    });
 
-      const result = await processRequest({
-        operationName,
-        query: query,
-        variables,
-        request,
-        schema,
-        parse,
-        validate,
-        execute,
-        contextFactory,
-      });
+    reply.status(response.status);
 
-      sendResult(result, reply.raw);
-    },
-  });
+    const reader = response.body!.getReader();
 
-  return server;
-};
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      reply.send(value);
+    }
 
-export default getServer;
+    return reply;
+  }
+});

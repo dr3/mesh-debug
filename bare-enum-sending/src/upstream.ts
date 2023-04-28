@@ -1,31 +1,25 @@
 import fastify from "fastify";
 
-const getUpstreamServer = () => {
-  const server = fastify();
+export const server = fastify();
 
-  server.route({
-    method: ["POST"],
-    url: "/pet",
-    async handler(request, reply) {
-      const body = request.body as any
+server.route({
+  method: ["POST"],
+  url: "/pet",
+  async handler(request, reply) {
+    const body = request.body as any
 
-      if (body.id === "pet200") {
-        return reply
-          .status(200)
-          .send({ ...body, debug: JSON.stringify(body) });
-      }
+    if (body.id === "pet200") {
+      return reply
+        .status(200)
+        .send({ ...body, debug: JSON.stringify(body) });
+    }
 
-      if (body.id === "pet500") {
-        return reply
-          .status(500)
-          .send({ error: "this is bad", severity: "real bad" });
-      }
+    if (body.id === "pet500") {
+      return reply
+        .status(500)
+        .send({ error: "this is bad", severity: "real bad" });
+    }
 
-      return reply.status(500).send({ error: `can not create pet` });
-    },
-  });
-
-  return server;
-};
-
-export default getUpstreamServer;
+    return reply.status(500).send({ error: `can not create pet` });
+  },
+});

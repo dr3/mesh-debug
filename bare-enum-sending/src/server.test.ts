@@ -1,5 +1,6 @@
-import getServer from "./server";
-import getUpstreamServer from "./upstream";
+import { fetch } from '@whatwg-node/fetch';
+import { app as server } from "./server";
+import { server as upstream } from "./upstream";
 
 const petQuery = `
 mutation myMutation(
@@ -26,27 +27,27 @@ mutation myMutation(
 `;
 
 describe("server", () => {
-  const upsteamApp = getUpstreamServer();
-
   beforeAll(async () => {
-    await upsteamApp.listen({ port: 8801 });
+    await server.listen({
+      port: 4000,
+    });
+    await upstream.listen({
+      port: 4001,
+    });
   });
 
   afterAll(async () => {
-    upsteamApp.close();
+    await server.close();
+    await upstream.close();
   });
 
   it("should return data", async () => {
-    const app = await getServer();
-
-    const response = await app.inject({
-      method: "POST",
-      url: "/graphql",
+    const response = await fetch('http://localhost:4000/graphql', {
+      method: 'POST',
       headers: {
-        accept: "application/json",
-        "content-type": "application/json",
+        'Content-Type': 'application/json',
       },
-      payload: JSON.stringify({
+      body: JSON.stringify({
         query: petQuery,
         variables: {
           pet: {
@@ -54,11 +55,14 @@ describe("server", () => {
             name: 'Bob',
             type: 'FLUFFYBOI'
           },
-        },
+        }
       }),
     });
 
-    expect(response.statusCode).toEqual(200);
-    expect(JSON.parse(JSON.parse(response.body).data.postPet.debug).type).toEqual('FluffyBoi');
+    const resJson = await response.json();
+
+    console.log(JSON.stringify(resJson, null, 4))
+
+    expect(JSON.parse(resJson.data.postPet.debug).type).toEqual('FluffyBoi');
   });
 });
